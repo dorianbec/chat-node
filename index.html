@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>Chat temps réel !</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <style>
+          body {
+            background-color: #EFEFEF;
+          }
+            #zone_chat strong {
+                color: white;
+                background-color: black;
+                padding: 2px;
+            }
+            .message, .btn, .btn-info, li {
+              height: auto;
+              width: auto;
+              padding: 25px;
+              background-color: #ff7f50;
+              opacity: 0.6;
+              border-radius: 10px;
+              margin:10px;
+              list-style-type: none;
+            }
+            .message {
+              width: auto;
+              padding: 5px;
+            }
+            .btn, .btn-info, form-control {
+              padding: 5px;
+              border: 0px;
+            }
+            #zone_chat {
+              
+              overflow-y: scroll;
+              height: 550px;
+              width: 100%;
+              margin-top: 35px;
+            }
+            #formulaire_chat #message{
+              border-radius: 12px;
+              border: 1px solid #000000;
+              height: 400px;
+              width: 100%;
+              margin-top: 35px;
+            }
+            #chat {
+              border-radius: 12px;
+              height: 80%;
+              margin-top: 35px;
+            }
+            .container-fluid {
+              margin: 0px;
+              padding: 0px;
+            }
+            #envoi_message {
+              height: 60px;
+              width: 100%;
+            }
+        </style>
+        
+    </head>
+ 
+    <body>
+      <div class="container">
+        <div class="row" id="chat">
+            <div class="col-12 text-center">
+                <h1>Le super Chat temps réel !</h1>
+            </div>
+        <div class="col-12 col-md-7">
+          <section id="zone_chat"></section>
+          
+        </div>
+        
+        <div class="col-12 col-md-5">
+            <form action="/" method="post" id="formulaire_chat">
+              <textarea rows="10" cols="50" name="message" id="message" placeholder="Votre message..."  size="400" autofocus></textarea>
+              
+            <input type="submit" id="envoi_message" value="Envoyer" />
+            </form>
+        </div>
+      </div>
+    </div>
+      <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+        <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+        <script src="/socket.io/socket.io.js"></script>
+        <script>
+
+            // Connexion à socket.io
+            var socket = io.connect('http://localhost:8080');
+
+            // On demande le pseudo, on l'envoie au serveur et on l'affiche dans le titre
+            
+            var pseudo = prompt('Quel est votre pseudo ?');
+            socket.emit('nouveau_client', pseudo);
+            document.title = pseudo + ' - ' + document.title;
+
+
+            swal("Good job!", "You clicked the button!", "success");
+           
+                $(function () {
+                  var socket = io();
+                  $('form').submit(function(e){
+                    e.preventDefault(); // prevents page reloading
+                    socket.emit('chat message', $('#message').val());
+                    $('#message').val('');
+                    return false;
+                  });
+                  socket.on('chat message', function(msg){
+                    msg = pseudo + ': ' + msg
+                    $('#zone_chat').append($('<li>').text(msg));
+                    window.document.getElementById('zone_chat').scrollTop = window.document.getElementById('zone_chat').scrollHeight;
+                  });
+                });
+                
+        </script>
+        
+    </body>
+</html>

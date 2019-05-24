@@ -1,0 +1,19 @@
+{
+  "name": "nodo",
+  "version": "1.0.0",
+  "description": "nodo",
+  "main": "index.js",
+  "scripts": {
+    "test": "nodo"
+  },
+  "keywords": [
+    "nodo"
+  ],
+  "author": "nodo",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.15.2",
+    "http": "0.0.0",
+    "socket.io": "^2.2.0"
+  }
+}
